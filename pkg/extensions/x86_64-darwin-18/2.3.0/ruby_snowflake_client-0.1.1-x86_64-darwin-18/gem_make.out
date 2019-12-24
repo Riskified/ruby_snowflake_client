@@ -1,0 +1,28 @@
+current directory: /Users/dmitchell/snowflake_c_connect/pkg/gems/ruby_snowflake_client-0.1.1-x86_64-darwin-18/ext/ruby_snowflake_client
+/Users/dmitchell/.rvm/rubies/ruby-2.3.8/bin/ruby -I /Users/dmitchell/.rvm/rubies/ruby-2.3.8/lib/ruby/site_ruby/2.3.0 -r ./siteconf20200102-44648-1kgawc1.rb extconf.rb
+checking for whether -fPIC is accepted as CFLAGS... yes
+/Users/dmitchell/.rvm/rubies/ruby-2.3.8/include
+./../../lib
+creating Makefile
+
+current directory: /Users/dmitchell/snowflake_c_connect/pkg/gems/ruby_snowflake_client-0.1.1-x86_64-darwin-18/ext/ruby_snowflake_client
+make "DESTDIR=" clean
+
+current directory: /Users/dmitchell/snowflake_c_connect/pkg/gems/ruby_snowflake_client-0.1.1-x86_64-darwin-18/ext/ruby_snowflake_client
+make "DESTDIR="
+compiling ruby_snowflake_client.c
+In file included from ruby_snowflake_client.c:3:
+In file included from ./../../lib/client.h:13:
+In file included from ./../../lib/basic_types.h:15:
+./../../lib/platform.h:43:9: warning: 'PATH_SEP' macro redefined [-Wmacro-redefined]
+#define PATH_SEP '/'
+        ^
+/Users/dmitchell/.rvm/rubies/ruby-2.3.8/include/ruby-2.3.0/ruby/defines.h:218:9: note: previous definition is here
+#define PATH_SEP ":"
+        ^
+1 warning generated.
+linking shared-object ruby_snowflake_client.bundle
+
+current directory: /Users/dmitchell/snowflake_c_connect/pkg/gems/ruby_snowflake_client-0.1.1-x86_64-darwin-18/ext/ruby_snowflake_client
+make "DESTDIR=" install
+/usr/local/opt/coreutils/bin/ginstall -c -m 0755 ruby_snowflake_client.bundle ./.gem.20200102-44648-idb0xy
