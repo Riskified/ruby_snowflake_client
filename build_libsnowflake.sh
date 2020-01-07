@@ -17,7 +17,7 @@ LIB_SNOWFLAKE_DIR="${LIB_SNOWFLAKE_DIR:-$RUBY_SNOWFLAKE_DIR/../libsnowflakeclien
 #./scripts/build_zlib.sh
 #popd
 
-$LIB_SNOWFLAKE_DIR/scripts/build_dependencies.sh -t Release
+#$LIB_SNOWFLAKE_DIR/scripts/build_dependencies.sh -t Release
 $LIB_SNOWFLAKE_DIR/scripts/build_libsnowflakeclient.sh -s -t Release
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
