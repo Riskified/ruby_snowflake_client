@@ -13,7 +13,7 @@ append_cflags('-fPIC')
 LIB_DIRS = [LIBDIR, LIB_SNOWFLAKE_DIR]
 
 # array of all libraries that the C extension should be compiled against
-libs = ['-lsnowflakeclient', '-laws-cpp-sdk-core', '-laws-cpp-sdk-s3', '-lazure-storage-lite', '-lcrypto', '-lcurl', '-lssl', '-luuid', '-lz']
+libs = ['-lsnowflakeclient', '-lcrypto', '-lcurl', '-lssl', '-lz']
 
 dir_config('snowflakeclient', HEADER_DIRS, LIB_DIRS)
 
