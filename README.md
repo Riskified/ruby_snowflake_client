@@ -4,7 +4,7 @@ A small gem wrapping [libsnowflakeclient](https://github.com/snowflakedb/libsnow
 stream query results so as to not allocate memory for more than a row at a time.
 
 Building the gem file as Ruby native: 
-gem build ruby_snowflake_client.gemspec
+`gem build ruby_snowflake_client.gemspec`
 
 Install this library (there are other means):
 `gem install pkg/ruby_snowflake_client-0.1.0.gem`
