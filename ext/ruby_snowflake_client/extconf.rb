@@ -8,9 +8,10 @@ LIBDIR = RbConfig::CONFIG['libdir']
 INCLUDEDIR = RbConfig::CONFIG['includedir']
 HEADER_DIRS = [INCLUDEDIR, LIB_SNOWFLAKE_DIR]
 append_cflags('-fPIC')
+LIB_LOCAL_MAC = "/opt/local/lib/"
 
 # setup constant that is equal to that of the file path that holds that static libraries that will need to be compiled against
-LIB_DIRS = [LIBDIR, LIB_SNOWFLAKE_DIR]
+LIB_DIRS = [LIBDIR, LIB_SNOWFLAKE_DIR, LIB_LOCAL_MAC ]
 
 # array of all libraries that the C extension should be compiled against
 libs = ['-lsnowflakeclient', '-lcrypto', '-lcurl', '-lssl', '-lz']
@@ -21,6 +22,9 @@ dir_config('snowflakeclient', HEADER_DIRS, LIB_DIRS)
 libs.each do |lib|
   $LOCAL_LIBS << "#{lib} "
 end
+
+build_libsnowflake = "bash ./build_libsnowflakeclient.sh"
+system(build_libsnowflake)
 
 create_makefile(extension_name)
 
