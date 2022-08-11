@@ -6,10 +6,12 @@ RUBY_SNOWFLAKE_DIR="../../"
 LIB_SNOWFLAKE_DIR="./libsnowflakeclient"
 CURDIR=$PWD
 
-
-pushd $LIB_SNOWFLAKE_DIR
-./scripts/build_libsnowflakeclient.sh -s -t Release
-popd
+# use prebuild version , after upgrading to alpine 3.13 with C compiler => 10.0.0 compiler failed
+if [[ "$REBUILD_LIBSNOWFLAKECLIENT" == "true" ]]; then
+  pushd $LIB_SNOWFLAKE_DIR
+  ./scripts/build_libsnowflakeclient.sh -s -t Release
+  popd
+fi
 
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
