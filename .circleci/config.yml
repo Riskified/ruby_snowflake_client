@@ -1,0 +1,86 @@
+version: 2.1
+
+# Builds the gem on every push and publishes it to Artifactory when a version tag is pushed.
+# To release: bump s.version in ruby_snowflake_client.gemspec, merge, then push a git tag
+# equal to that version (for example 0.1.3).
+
+executors:
+  ruby-3-3:
+    resource_class: riskified/container-agent
+    docker:
+      - image: 284309667046.dkr.ecr.us-east-1.amazonaws.com/riskified/images-library/shopify-app-base:master-3.3.14
+        user: riskified
+  ruby-3-1:
+    resource_class: riskified/container-agent
+    docker:
+      - image: 284309667046.dkr.ecr.us-east-1.amazonaws.com/riskified/images-library/shopify-app-base:master-3.1.4-hotfix
+        user: riskified
+
+commands:
+  build_and_check:
+    steps:
+      - checkout
+      - run:
+          name: Build gem
+          command: gem build ruby_snowflake_client.gemspec
+      - run:
+          name: Install gem (compiles the C extension)
+          command: gem install --user-install ./ruby_snowflake_client-*.gem
+      - run:
+          name: Load the extension
+          command: ruby -e 'require "ruby_snowflake_client"; puts "ruby #{RUBY_VERSION}: #{SnowflakeCConnection} < #{SnowflakeCConnection.superclass}"'
+
+jobs:
+  build-ruby-3-3:
+    executor: ruby-3-3
+    steps:
+      - build_and_check
+  build-ruby-3-1:
+    executor: ruby-3-1
+    steps:
+      - build_and_check
+  deploy:
+    executor: ruby-3-3
+    steps:
+      - checkout
+      - run:
+          name: Check that the tag matches the gemspec version
+          command: |
+            GEM_VERSION=$(ruby -e 'puts Gem::Specification.load("ruby_snowflake_client.gemspec").version')
+            if [ "$CIRCLE_TAG" != "$GEM_VERSION" ]; then
+              echo "Tag $CIRCLE_TAG does not match gemspec version $GEM_VERSION"
+              exit 1
+            fi
+      - run: gem build ruby_snowflake_client.gemspec
+      - run: mkdir -p ~/.gem
+      - run: curl -u${ARTIFACTORY_USER}:${ARTIFACTORY_PASSWORD} https://riskified.jfrog.io/riskified/api/gems/gems/api/v1/api_key.yaml > ~/.gem/credentials
+      - run: chmod 600 ~/.gem/credentials
+      - run: gem push ruby_snowflake_client-${CIRCLE_TAG}.gem --key rubygems --host https://riskified.jfrog.io/riskified/api/gems/gems-local
+
+workflows:
+  build-n-deploy:
+    jobs:
+      - build-ruby-3-3:
+          context:
+            - docker-rw
+          filters:
+            tags:
+              only: /.*/
+      - build-ruby-3-1:
+          context:
+            - docker-rw
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          context: # artifactory-rw must come last: its ARTIFACTORY_* credentials have to win
+            - docker-rw
+            - artifactory-rw
+          requires:
+            - build-ruby-3-3
+            - build-ruby-3-1
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
