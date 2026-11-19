@@ -288,7 +288,7 @@ snowflake_connection_port(VALUE self) {
 
 void
 Init_ruby_snowflake_client() {
-    rb_cEncapsulateSfConnect = rb_define_class("SnowflakeCConnection", rb_cData);
+    rb_cEncapsulateSfConnect = rb_define_class("SnowflakeCConnection", rb_cObject);
 
     rb_define_alloc_func(rb_cEncapsulateSfConnect, sf_wrapper_alloc);
 
