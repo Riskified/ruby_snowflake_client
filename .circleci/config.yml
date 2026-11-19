@@ -28,7 +28,9 @@ commands:
           command: gem install --user-install ./ruby_snowflake_client-*.gem
       - run:
           name: Load the extension
-          command: ruby -e 'require "ruby_snowflake_client"; puts "ruby #{RUBY_VERSION}: #{SnowflakeCConnection} < #{SnowflakeCConnection.superclass}"'
+          # Block scalar on purpose: in a plain YAML value, " #" starts a comment and cuts the command short.
+          command: |
+            ruby -e 'require "ruby_snowflake_client"; puts "ruby #{RUBY_VERSION}: #{SnowflakeCConnection} < #{SnowflakeCConnection.superclass}"'
 
 jobs:
   build-ruby-3-3:
